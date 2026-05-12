@@ -1,10 +1,12 @@
 ## ADDED Requirements
 
+> **Note:** This spec was implemented using Firebase Cloud Functions. The architecture has since been updated to use **Vercel Serverless Functions** instead, due to Firebase Cloud Functions requiring a Blaze (paid) plan.
+
+### Requirement: Vercel Serverless Functions
+The system SHALL implement serverless functions via Vercel for matchmaking and game logic.
+
 ### Requirement: Firebase client SDK initialization
 The system SHALL initialize Firebase client SDK in `src/lib/firebase.ts` with configuration from environment variables.
-
-### Requirement: Firebase Admin SDK initialization
-The system SHALL initialize Firebase Admin SDK in `functions/src/db.ts` for server-side operations.
 
 ### Requirement: Anonymous authentication
 The system SHALL configure Firebase Anonymous Auth for player identification without requiring credentials.
@@ -14,9 +16,6 @@ The system SHALL load Firebase configuration from `NEXT_PUBLIC_FIREBASE_*` envir
 
 ### Requirement: Firebase config structure
 The Firebase configuration SHALL include: apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId, measurementId.
-
-### Requirement: Firebase Analytics
-The system SHALL initialize Firebase Analytics for tracking if measurementId is provided.
 
 #### Scenario: Firebase client initializes with valid config
 - **WHEN** Firebase configuration is present in environment variables

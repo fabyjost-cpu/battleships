@@ -1,24 +1,19 @@
 ## ADDED Requirements
 
+> **Note:** This spec was partially implemented. Cloud Functions were set up but the architecture has since been updated to use **Vercel Serverless Functions** instead, due to Firebase Cloud Functions requiring a Blaze (paid) plan. Firebase Realtime Database and Firebase Hosting are still in use.
+
 ### Requirement: Firebase CLI configuration
 The system SHALL have a `firebase.json` file configured for Firebase CLI deployment.
 
 ### Requirement: Realtime Database configuration
 The `firebase.json` SHALL include configuration for Firebase Realtime Database.
 
-### Requirement: Cloud Functions configuration
-The `firebase.json` SHALL include configuration for Cloud Functions with Node.js runtime using TypeScript.
+### Requirement: Vercel configuration
+The system SHALL have a `vercel.json` file configured for Vercel deployment of serverless functions and Next.js hosting.
 
 ### Requirement: Hosting configuration
-The `firebase.json` SHALL include configuration for Firebase Hosting pointing to Next.js build output.
+The `vercel.json` SHALL include configuration for Next.js hosting.
 
-### Requirement: Emulator configuration
-The system SHALL have Firebase emulator configuration for local development of RTDB and Cloud Functions.
-
-#### Scenario: Firebase deploy targets are configured
-- **WHEN** `firebase deploy --only hosting` is run
-- **THEN** Firebase CLI deploys to the configured hosting site
-
-#### Scenario: Emulators start successfully
-- **WHEN** `firebase emulators:start` is run
-- **THEN** RTDB and Functions emulators start on default ports without errors
+#### Scenario: Vercel deploy targets are configured
+- **WHEN** `vercel deploy` is run
+- **THEN** Vercel CLI deploys to the configured project

@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - always ask if there is any uncertainty or you see room for improvement
 - always try to follow the docs md files. if there's an inconsistency or something that should be added there, ask the user about the requested change and only continue your task afterward
 - whenever architecture, techstack or game features change due to a prompt by the user, propose that change in the respective md files as well.
-**DON'T:** 
+**DON'T:**
 - implement without being told to do so
 - push changes to main branch without explicit approval
 - igore existing patterns or readme files we created
@@ -23,26 +23,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Quick Reference
 
 ### Tech Stack
-Next.js 14 + Firebase (RTDB + Cloud Functions + Hosting)
+Next.js 15 (App Router) + Firebase (RTDB) + Vercel (Serverless Functions + Hosting)
 
 ### Key Commands
 ```bash
 npm run dev              # Start Next.js dev server
-firebase emulators:start # Start Firebase emulators
-firebase deploy          # Deploy to Firebase
+vercel dev               # Start Vercel dev server (includes serverless functions)
+vercel deploy            # Deploy to Vercel (hosting + serverless functions)
+npm run build            # Build Next.js for production
 ```
 
 ### Critical Files
 - `src/lib/game/board.ts` - Ship placement algorithm
 - `src/lib/game/battle.ts` - Combat resolution
-- `functions/src/matchmaking.ts` - Queue & room creation
-- `functions/src/game.ts` - Game logic Cloud Functions
+- `src/app/api/matchmaking/route.ts` - Matchmaking endpoint
+- `src/app/api/game/route.ts` - Game logic endpoints
 
 ### TODO
 - [ ] Project initialization (Next.js + Firebase)
-- [ ] Firebase project setup (RTDB, Functions, Hosting)
+- [ ] Firebase project setup (RTDB)
 - [ ] Game logic library (board, ships, battle)
-- [ ] Firebase Cloud Functions (matchmaking, game logic)
+- [ ] Vercel Serverless Functions (matchmaking, game logic)
 - [ ] Firebase RTDB security rules
 - [ ] Frontend UI (landing, game board)
 - [ ] Real-time game sync with Firebase SDK

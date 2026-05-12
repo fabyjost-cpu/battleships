@@ -82,7 +82,7 @@ When a bomb is hit:
 ### Queue System
 1. Player clicks "Find Match"
 2. Player enters queue (stored in Firebase RTDB)
-3. When 2 players in queue → Cloud Function creates game room
+3. When 2 players in queue → Vercel Serverless Function creates game room
 4. Both players redirected to game
 
 ### Game Room

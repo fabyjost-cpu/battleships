@@ -48,17 +48,20 @@ export interface Position {
 }
 ```
 
-### Cloud Functions (`functions/src/`)
+### Vercel Serverless Functions (`src/app/api/`)
 
-- **TypeScript** - All Cloud Functions written in TypeScript
-- One function per file for large functions
-- Group related functions in same file
-- Export naming: `onMatchmakingJoin`, `onGameShot`
+- **TypeScript** - All serverless functions written in TypeScript
+- Route-based routing: `src/app/api/<resource>/route.ts`
+- Use Next.js `NextRequest` / `NextResponse` for HTTP handling
+- Export named HTTP method handlers: `GET`, `POST`, `PUT`, `DELETE`
 
 ```typescript
-// functions/src/matchmaking.ts
-export async function onJoinQueue(...): Promise<...> { }
-export async function onLeaveQueue(...): Promise<...> { }
+// src/app/api/matchmaking/route.ts
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  // ... logic
+  return NextResponse.json({ success: true });
+}
 ```
 
 ### Styles (`.module.css` or Tailwind)
@@ -87,7 +90,7 @@ const buttonClass = "bg-blue-500";
 | React Components | PascalCase | `GameBoard` |
 | Hooks | camelCase, `use` prefix | `useGameState` |
 | Utilities | camelCase or kebab-case | `generateBoard` |
-| Cloud Functions | `on` + Resource + Action | `onMatchmakingJoin` |
+| Serverless Functions | HTTP method + Resource | `POST /api/matchmaking` |
 | Event Handlers | `handle` + Event | `handleCellClick` |
 | Callbacks | `on` + Result | `onShotFired` |
 
@@ -155,13 +158,17 @@ const [localGame, setLocalGame] = useState(game);
 ### Error Handling
 
 ```typescript
-// Cloud Functions: Always wrap in try/catch
-export async function onGameShot(...) {
+// Vercel Functions: Return appropriate status codes
+export async function POST(req: NextRequest) {
   try {
     // ... logic
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Shot error:', error);
-    throw new HttpsError('internal', 'Failed to process shot');
+    console.error('Matchmaking error:', error);
+    return NextResponse.json(
+      { error: 'Failed to join queue' },
+      { status: 500 }
+    );
   }
 }
 
@@ -173,17 +180,20 @@ if (error) return <ErrorMessage error={error} />;
 
 ### Security
 
-- **Validate in Cloud Functions, not just client**
+- **Validate in Serverless Functions, not just client**
 - Use Firebase Auth UID as player identifier
 - Check player is in room before processing actions
 - Never trust client-provided data
 
 ```typescript
 // Good: Server validates
-export async function onGameShot(data: {x: number, y: number}, context: Context) {
-  const uid = context.auth?.uid;
+export async function POST(req: NextRequest) {
+  const uid = req.headers.get('x-uid'); // From Firebase Auth
   if (!canPlayerShoot(roomId, uid)) {
-    throw new HttpsError('permission-denied', 'Not your turn');
+    return NextResponse.json(
+      { error: 'Not your turn' },
+      { status: 403 }
+    );
   }
 }
 ```
@@ -206,6 +216,11 @@ src/
 │   ├── game/
 │   │   └── [roomId]/        # Dynamic route for games
 │   │       └── page.tsx
+│   ├── api/                  # Vercel Serverless Functions
+│   │   ├── matchmaking/
+│   │   │   └── route.ts     # POST /api/matchmaking/join, leave
+│   │   └── game/
+│   │       └── route.ts     # POST /api/game/shot, ready, regenerate
 │   └── layout.tsx           # Root layout
 ├── components/              # Shared UI components
 │   ├── ui/                  # Generic (Button, Card, Spinner)
@@ -216,18 +231,12 @@ src/
 │   │   ├── board.ts
 │   │   ├── ships.ts
 │   │   └── battle.ts
-│   ├── firebase.ts          # Firebase client init
+│   ├── firebase.ts         # Firebase client init
 │   └── hooks/               # Custom React hooks
 │       ├── useAuth.ts
 │       └── useGameState.ts
 └── types/                   # TypeScript types
     └── game.ts
-
-functions/src/              # Cloud Functions
-├── index.ts                # Exports
-├── matchmaking.ts           # Queue logic
-├── game.ts                 # Game actions
-└── db.ts                   # Admin init
 ```
 
 ### Import Order
@@ -278,15 +287,20 @@ import { getDatabase } from 'firebase/database';
 
 const clientFirebase = initializeApp(firebaseConfig);
 export const db = getDatabase(clientFirebase);
+```
 
-// functions/src/db.ts (Admin)
-import { initializeApp, getApps } from 'firebase-admin/app';
-import { getDatabase } from 'firebase-admin/database';
+### Vercel Serverless Functions
 
-if (!getApps().length) {
-  initializeApp({ credential: cert(serviceAccount), databaseURL: ... });
+```typescript
+// src/app/api/matchmaking/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { adminDb } from '@/lib/firebase-admin'; // if using Admin SDK
+
+export async function POST(req: NextRequest) {
+  const { playerId } = await req.json();
+  // ... matchmaking logic
+  return NextResponse.json({ success: true });
 }
-export const adminDb = getDatabase();
 ```
 
 ### Tailwind CSS
@@ -376,7 +390,7 @@ Shadow: shadow-lg shadow-black/20
 ## Testing
 
 - Unit test pure functions (game logic)
-- Integration test Cloud Functions with Firebase Emulator
+- Integration test serverless functions with Firebase RTDB
 - E2E test critical flows (matchmaking, game, win/lose)
 
 ```typescript
@@ -407,19 +421,19 @@ describe('generateBoard', () => {
 ### Per-Feature Workflow
 1. Create branch: `git checkout -b feat/game-logic`
 2. Implement and test
-3. Deploy to Firebase (staging): `firebase deploy --only hosting,functions`
-4. Commit: `git commit -m "feat: add game logic library"`
+3. Deploy to Vercel (staging): `vercel`
+4. Commit: `git commit -m "feat: add matchmaking system"`
 5. Push: `git push -u origin HEAD`
 6. PR to `main` when ready
 
 ### Commit Messages (Conventional Commits)
 ```
-feat: add matchmaking system
+feat: add matchmaking API endpoint
 fix: resolve shot cooldown bug
 docs: update game spec
 refactor: extract board generation
 test: add battle resolution tests
-chore: setup Firebase emulators
+chore: setup Vercel serverless functions
 ```
 
 ### Git Commands
