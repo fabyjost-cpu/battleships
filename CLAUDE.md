@@ -14,16 +14,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Required Workflow
 
-**Per-Feature Workflow** - Use OpenSpec for all changes:
+**Per-Feature Workflow** - Use OpenSpec for all changes. Complete EVERY step in order:
 
 1. **Propose**: Run `/opsx:propose` or `openspec propose` to create change artifacts
 2. **Implement**: Run `/opsx:apply <name>` to implement tasks from the change
 3. **Test**: Verify `npm run build && npm test` pass before committing
-4. **Commit**: Create a commit with conventional commit message
-5. **Push**: Push to remote when ready
-6. **Archive**: Run `/opsx:archive <name>` when change is complete and merged
+4. **Update docs**: Update md files as needed (e.g., TODO.md, CLAUDE.md, specs)
+5. **Commit**: Create a commit with conventional commit message
+6. **Push**: Push to remote when ready
+7. **Create PR**: Create a PR on GitHub for code review
+8. **Archive**: Run `/opsx:archive <name>` only after PR is merged
 
-**Never commit directly to main** - always use feature branches and PRs.
+**CRITICAL**: Do NOT skip steps 4-7 after implementing. Always complete the full workflow.
 
 ## Project Overview
 
@@ -52,12 +54,5 @@ npm run build            # Build Next.js for production
 - `src/app/api/matchmaking/route.ts` - Matchmaking endpoint
 - `src/app/api/game/route.ts` - Game logic endpoints
 
-### TODO
-- [x] Project initialization (Next.js + Firebase)
-- [ ] Firebase project setup (RTDB)
-- [x] Game logic library (board, ships, battle) ✓
-- [ ] Vercel Serverless Functions (matchmaking, game logic)
-- [ ] Firebase RTDB security rules
-- [ ] Frontend UI (landing, game board)
-- [ ] Real-time game sync with Firebase SDK
-- [ ] Game over and stats
+### Progress
+See [TODO.md](./TODO.md) for implementation progress tracking.

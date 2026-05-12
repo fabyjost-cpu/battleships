@@ -36,16 +36,18 @@ Pure TypeScript game logic (no Firebase, no React):
 
 ---
 
-## Slice 2: Cloud Functions Base
-**Branch:** `feat/cloud-functions`
+## Slice 2: Cloud Functions Base ✓
+**Branch:** `feat/cloud-functions` ✓ (merged)
 
-### functions/src/db.ts
-- Firebase Admin initialization
-- Exported adminDb reference
+### src/lib/firebase-admin.ts
+- Firebase Admin initialization with env credentials
+- Exported `adminDb` reference
 
-### functions/src/index.ts
-- Export all functions
-- Basic error handling with HttpsError
+### src/lib/api-error.ts
+- `ApiError` class with `toResponse()` method
+- Consistent JSON error format for API routes
+
+**Tests:** ApiError tests (3 passing)
 
 ---
 
