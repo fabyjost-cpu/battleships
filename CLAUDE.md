@@ -22,7 +22,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 4. **Update docs**: Update md files as needed (e.g., TODO.md, CLAUDE.md, specs)
 5. **Commit**: Create a commit with conventional commit message
 6. **Push**: Push to remote when ready
-7. **Archive**: Run `/opsx:archive <name>` when change is complete and merged
+7. **Create PR**: Create a PR on GitHub for code review
+8. **Archive**: Run `/opsx:archive <name>` only after PR is merged
 
 **CRITICAL**: Do NOT skip steps 4-7 after implementing. Always complete the full workflow.
 
