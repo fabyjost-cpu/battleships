@@ -43,3 +43,8 @@ next-env.d.ts
 
 # Functions
 functions/lib/
+.vercel
+
+# Test artifacts
+test-results/
+playwright-report/
