@@ -407,9 +407,10 @@ describe('generateBoard', () => {
 ### Per-Feature Workflow
 1. Create branch: `git checkout -b feat/game-logic`
 2. Implement and test
-3. Commit: `git commit -m "feat: add game logic library"`
-4. Push: `git push -u origin HEAD`
-5. PR to `main` when ready
+3. Deploy to Firebase (staging): `firebase deploy --only hosting,functions`
+4. Commit: `git commit -m "feat: add game logic library"`
+5. Push: `git push -u origin HEAD`
+6. PR to `main` when ready
 
 ### Commit Messages (Conventional Commits)
 ```

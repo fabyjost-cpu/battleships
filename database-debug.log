@@ -1,0 +1,4 @@
+16:38:29.940 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+16:38:30.110 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+16:38:42.252 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO com.firebase.core.namespace.NamespaceActor - workshop-battleships-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 110ms, init: 0ms
+16:38:42.319 [NamespaceSystem-blocking-namespace-operation-dispatcher-6] INFO com.firebase.core.namespace.StateManager - Namespace workshop-battleships-default-rtdb status Active to Active

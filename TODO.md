@@ -63,7 +63,7 @@ Pure TypeScript game logic (no Firebase, no React):
 - `/games/{roomId}`
 
 ### Features
-- 60-second room timeout handling
+- 30-second room timeout handling
 - Anonymous auth integration
 
 ---
@@ -145,17 +145,24 @@ git checkout -b feat/<slice-name>
 
 # 2. Implement feature
 
-# 3. Commit
+# 3. Run tests and verify
+npm run build
+npm test
+
+# 4. Deploy to Firebase (staging)
+firebase deploy --only hosting,functions
+
+# 5. Commit
 git add .
 git commit -m "feat: add <feature description>"
 
-# 4. Push
+# 6. Push
 git push -u origin HEAD
 
-# 5. Create PR to main
+# 7. Create PR to main
 # (via GitHub UI or gh cli)
 
-# 6. After merge, update main
+# 8. After merge, update main
 git checkout main && git pull origin main
 ```
 

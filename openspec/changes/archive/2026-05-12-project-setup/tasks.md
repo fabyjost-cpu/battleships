@@ -3,7 +3,7 @@
 - [x] 1.1 Create Next.js 14 app with App Router and TypeScript using `npx create-next-app@latest battleships --typescript --tailwind --app --src-dir --no-git`
 - [x] 1.2 Enable strict TypeScript mode in tsconfig.json if not default
 - [x] 1.3 Create folder structure: `src/components/`, `src/lib/`, `src/types/`, `src/app/game/`
-- [ ] 1.4 Verify `npm run dev` starts without errors
+- [x] 1.4 Verify `npm run dev` starts without errors
 
 ## 2. Configure Firebase Client SDK
 
@@ -25,7 +25,7 @@
 - [x] 3.1 Update `tailwind.config.ts` with design system colors from guidelines.md
 - [x] 3.2 Add primary (blue-500), secondary (gray-500), success (green-500), danger (red-500), background (slate-900), surface (slate-800)
 - [x] 3.3 Update `src/app/globals.css` to set default background to slate-900
-- [ ] 3.4 Verify Tailwind classes render correctly with design colors
+- [x] 3.4 Verify Tailwind classes render correctly with design colors
 
 ## 4. Configure Firebase Cloud Functions
 
@@ -54,5 +54,5 @@
 ## 7. Verify Project
 
 - [x] 7.1 Verify `npm run build` completes without errors
-- [ ] 7.2 Verify Firebase emulators start correctly
-- [ ] 7.3 Verify landing page renders at localhost:3000
+- [x] 7.2 Verify Firebase emulators start correctly (Java 21 installed, emulators running on ports 9099/5001/9000/3000)
+- [x] 7.3 Verify landing page renders at localhost:3000
