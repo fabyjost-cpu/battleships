@@ -48,6 +48,50 @@ export async function POST(request: NextRequest) {
       throw new ApiError(400, 'Cannot regenerate after ready');
     }
 
+    // Check if setup phase has timed out
+    const now = Date.now();
+    const timedOut = now > room.phaseEndsAt;
+
+    if (timedOut) {
+      // Auto-finalize setup for all players and transition to battle
+      const players = room.players;
+      const updatedPlayers: Record<string, any> = {};
+
+      for (const pid of Object.keys(players)) {
+        const p = players[pid];
+        if (p.ready) {
+          updatedPlayers[pid] = p;
+        } else {
+          const { ships: shipsArray, board: boardWithShips } = createShips();
+
+          const emptyPositions: { x: number; y: number }[] = [];
+          for (let y = 0; y < 10; y++) {
+            for (let x = 0; x < 10; x++) {
+              if (boardWithShips[y][x] === 'water') {
+                emptyPositions.push({ x, y });
+              }
+            }
+          }
+
+          const bombPosition = emptyPositions.length > 0
+            ? emptyPositions[Math.floor(Math.random() * emptyPositions.length)]
+            : null;
+
+          updatedPlayers[pid] = {
+            ...p,
+            board: boardWithShips,
+            ships: shipsArray,
+            bombPosition,
+            ready: true,
+          };
+        }
+      }
+
+      await roomRef.child('players').set(updatedPlayers);
+      await roomRef.child('status').set('battle');
+      return NextResponse.json({ success: true, timedOut: true });
+    }
+
     const { ships: newShips, board: newBoard } = createShips();
 
     await roomRef.child(`players/${playerId}/board`).set(newBoard);

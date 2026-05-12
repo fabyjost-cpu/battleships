@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { ApiError } from '@/lib/api-error';
-import { resolveShot, checkWin, checkDraw } from '@/lib/game/battle';
+import { resolveShot, checkWin } from '@/lib/game/battle';
 import { Board } from '@/lib/game/board';
 import { Ship } from '@/lib/game/ships';
 
@@ -119,19 +119,20 @@ export async function POST(request: NextRequest) {
     const updatedSnapshot = await roomRef.get();
     const updatedRoom = updatedSnapshot.val();
     const updatedOpponentShips = updatedRoom.players[opponentId].ships;
+    const updatedPlayerShips = updatedRoom.players[playerId].ships;
 
     const opponentWon = checkWin(updatedOpponentShips);
-    const playerWon = checkWin(player.ships);
+    const playerWon = checkWin(updatedPlayerShips);
 
     if (opponentWon && playerWon) {
       await roomRef.child('status').set('finished');
       await roomRef.child('winner').set('draw');
     } else if (opponentWon) {
       await roomRef.child('status').set('finished');
-      await roomRef.child('winner').set(opponentId);
+      await roomRef.child('winner').set(playerId);
     } else if (playerWon) {
       await roomRef.child('status').set('finished');
-      await roomRef.child('winner').set(playerId);
+      await roomRef.child('winner').set(opponentId);
     }
 
     return NextResponse.json({
@@ -141,7 +142,7 @@ export async function POST(request: NextRequest) {
         hit: result.hit,
         sunk: result.sunk,
         bombExplosion: result.bombExplosion,
-        shipType: result.sunk ? opponentShips.find(s => s.hits.every(h => h))?.type : undefined,
+        shipType: result.sunk && result.newShips ? result.newShips.find(s => s.hits.every(h => h))?.type : undefined,
       },
       cooldown: newCooldown,
     });

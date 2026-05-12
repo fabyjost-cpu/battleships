@@ -77,9 +77,24 @@ export default function GameRoomPage() {
     setIsPlacementMode(!isPlacementMode);
   };
 
-  const handleCellClick = (x: number, y: number) => {
+  const handleCellClick = async (x: number, y: number) => {
     if (!isPlacementMode || !currentUserId) return;
-    console.log(`Bomb placement at ${x}, ${y}`);
+
+    const token = await auth.currentUser?.getIdToken();
+    if (!token) return;
+
+    const response = await fetch('/api/game/bomb', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ roomId, x, y }),
+    });
+
+    if (response.ok) {
+      setIsPlacementMode(false);
+    }
   };
 
   const handleEnemyCellClick = (x: number, y: number) => {

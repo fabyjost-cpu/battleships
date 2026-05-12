@@ -102,6 +102,6 @@ export function checkWin(ships: Ship[]): boolean {
   return ships.every(ship => isShipSunk(ship));
 }
 
-export function checkDraw(ships: Ship[]): boolean {
-  return ships.every(ship => isShipSunk(ship));
+export function checkDraw(playerShips: Ship[], opponentShips: Ship[]): boolean {
+  return checkWin(playerShips) && checkWin(opponentShips);
 }

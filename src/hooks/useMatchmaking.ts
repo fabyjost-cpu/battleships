@@ -50,20 +50,22 @@ export function useMatchmaking(): UseMatchmakingResult {
 
     const queueRef = ref(db, `matchmaking/queue/${user.uid}`);
 
-    const handleQueueChange = onValue(queueRef, (snapshot) => {
+    const handleQueueChange = (snapshot: any) => {
       if (snapshot.exists()) {
         setStatus('searching');
       } else {
-        if (status === 'searching') {
-          setStatus('idle');
-        }
+        // Only go to idle if we're not already matched
+        // This prevents overwriting 'matched' status
+        setStatus((prev) => (prev === 'matched' ? prev : 'idle'));
       }
-    });
+    };
+
+    onValue(queueRef, handleQueueChange);
 
     return () => {
       off(queueRef, 'value', handleQueueChange);
     };
-  }, [user, status]);
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;

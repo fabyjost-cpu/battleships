@@ -70,7 +70,13 @@ describe('battle.ts', () => {
   describe('checkDraw', () => {
     it('should return true when all ships destroyed', () => {
       const ships = [{ id: 'test', type: 'Carrier', size: 1, x: 0, y: 0, horizontal: true, hits: [true] }];
-      expect(checkDraw(ships)).toBe(true);
+      expect(checkDraw(ships, ships)).toBe(true);
+    });
+
+    it('should return false when only one player has all ships destroyed', () => {
+      const playerShips = [{ id: 'test', type: 'Carrier', size: 1, x: 0, y: 0, horizontal: true, hits: [true] }];
+      const opponentShips = [{ id: 'test', type: 'Carrier', size: 1, x: 0, y: 0, horizontal: true, hits: [false] }];
+      expect(checkDraw(playerShips, opponentShips)).toBe(false);
     });
   });
 });

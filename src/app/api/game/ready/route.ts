@@ -54,7 +54,50 @@ export async function POST(request: NextRequest) {
     const players = updatedRoom.players;
     const allReady = Object.keys(players).every(pid => players[pid].ready);
 
+    const now = Date.now();
+    const timedOut = now > room.phaseEndsAt;
+
     if (allReady) {
+      await roomRef.child('status').set('battle');
+    } else if (timedOut) {
+      // Handle setup timeout - auto-finalize for players not ready
+      const updatedPlayers: Record<string, any> = {};
+
+      for (const pid of Object.keys(players)) {
+        const p = players[pid];
+        if (p.ready) {
+          updatedPlayers[pid] = p;
+        } else {
+          // Import here to avoid circular deps
+          const { createShips } = await import('@/lib/game/ships');
+          const { generateBoard } = await import('@/lib/game/board');
+
+          const { ships: shipsArray, board: boardWithShips } = createShips();
+
+          const emptyPositions: { x: number; y: number }[] = [];
+          for (let y = 0; y < 10; y++) {
+            for (let x = 0; x < 10; x++) {
+              if (boardWithShips[y][x] === 'water') {
+                emptyPositions.push({ x, y });
+              }
+            }
+          }
+
+          const bombPosition = emptyPositions.length > 0
+            ? emptyPositions[Math.floor(Math.random() * emptyPositions.length)]
+            : null;
+
+          updatedPlayers[pid] = {
+            ...p,
+            board: boardWithShips,
+            ships: shipsArray,
+            bombPosition,
+            ready: true,
+          };
+        }
+      }
+
+      await roomRef.child('players').set(updatedPlayers);
       await roomRef.child('status').set('battle');
     }
 
