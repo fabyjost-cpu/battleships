@@ -11,6 +11,8 @@ firebase-debug.log
 firebase-debug*.log
 emulators.debug.log
 emulators*.log
+database-debug.log
+database*.log
 .DS_Store
 
 # Environment
