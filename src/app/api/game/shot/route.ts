@@ -89,6 +89,17 @@ export async function POST(request: NextRequest) {
 
     await roomRef.child(`players/${playerId}/lastShotTime`).set(now);
     await roomRef.child(`players/${playerId}/cooldown`).set(newCooldown);
+
+    // Update player stats
+    const playerStats = player.stats || { hits: 0, misses: 0, shotsFired: 0 };
+    if (result.hit) {
+      playerStats.hits = (playerStats.hits || 0) + 1;
+    } else {
+      playerStats.misses = (playerStats.misses || 0) + 1;
+    }
+    playerStats.shotsFired = (playerStats.shotsFired || 0) + 1;
+    await roomRef.child(`players/${playerId}/stats`).set(playerStats);
+
     await roomRef.child(`players/${opponentId}/board`).set(result.newBoard);
     if (result.newShips) {
       await roomRef.child(`players/${opponentId}/ships`).set(result.newShips);

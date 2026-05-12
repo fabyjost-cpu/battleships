@@ -161,8 +161,8 @@ Pure TypeScript game logic (no Firebase, no React):
 
 ---
 
-## Slice 6: Game Over & Stats
-**Branch:** `feat/game-over`
+## Slice 6: Game Over & Stats ✓
+**Branch:** `feat/game-over` ✓ (merged)
 
 ### components/game/GameOver.tsx
 - Winner announcement

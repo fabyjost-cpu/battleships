@@ -10,6 +10,7 @@ import SetupControls from '@/components/game/SetupControls';
 import EnemyBoard from '@/components/game/EnemyBoard';
 import OwnBoard from '@/components/game/OwnBoard';
 import CooldownIndicator from '@/components/game/CooldownIndicator';
+import GameOver from '@/components/game/GameOver';
 
 export default function GameRoomPage() {
   const params = useParams();
@@ -143,24 +144,10 @@ export default function GameRoomPage() {
 
   if (game.status === 'finished') {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-8">
-        <h1 className="text-4xl font-bold">Game Over</h1>
-        {winner === 'draw' ? (
-          <div className="text-2xl text-yellow-400">It&apos;s a Draw!</div>
-        ) : winner === currentUserId ? (
-          <div className="text-2xl text-green-400">You Win!</div>
-        ) : (
-          <div className="text-2xl text-red-400">You Lose!</div>
-        )}
-        <div className="flex gap-4 mt-4">
-          <button
-            onClick={() => router.push('/')}
-            className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Return to Lobby
-          </button>
-        </div>
-      </main>
+      <GameOver
+        game={game}
+        currentUserId={currentUserId}
+      />
     );
   }
 
