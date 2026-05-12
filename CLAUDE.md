@@ -9,7 +9,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - whenever architecture, techstack or game features change due to a prompt by the user, propose that change in the respective md files as well.
 **DON'T:**
 - implement without being told to do so
-- push changes to main branch without explicit approval
 - igore existing patterns or readme files we created
 
 ## Required Workflow
