@@ -46,13 +46,13 @@
 
 ## 6. Initialize Git Repository
 
-- [ ] 6.1 Run `git init` in project root
-- [ ] 6.2 Create initial commit with project skeleton
-- [ ] 6.3 Create `feat/setup` branch from main for this change
-- [ ] 6.4 Add `.gitignore` excluding node_modules, .next, firebase-debug.log, emulators.debug.log
+- [x] 6.1 Run `git init` in project root
+- [x] 6.2 Create initial commit with project skeleton
+- [x] 6.3 Create `feat/setup` branch from main for this change
+- [x] 6.4 Add `.gitignore` excluding node_modules, .next, firebase-debug.log, emulators.debug.log
 
 ## 7. Verify Project
 
-- [ ] 7.1 Verify `npm run build` completes without errors
+- [x] 7.1 Verify `npm run build` completes without errors
 - [ ] 7.2 Verify Firebase emulators start correctly
 - [ ] 7.3 Verify landing page renders at localhost:3000

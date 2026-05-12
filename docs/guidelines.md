@@ -50,14 +50,15 @@ export interface Position {
 
 ### Cloud Functions (`functions/src/`)
 
+- **TypeScript** - All Cloud Functions written in TypeScript
 - One function per file for large functions
 - Group related functions in same file
 - Export naming: `onMatchmakingJoin`, `onGameShot`
 
 ```typescript
 // functions/src/matchmaking.ts
-export async function onJoinQueue(...) { }
-export async function onLeaveQueue(...) { }
+export async function onJoinQueue(...): Promise<...> { }
+export async function onLeaveQueue(...): Promise<...> { }
 ```
 
 ### Styles (`.module.css` or Tailwind)
