@@ -51,8 +51,8 @@ Pure TypeScript game logic (no Firebase, no React):
 
 ---
 
-## Slice 3: Matchmaking System
-**Branch:** `feat/matchmaking` (in progress)
+## Slice 3: Matchmaking System ✓
+**Branch:** `feat/matchmaking` ✓ (merged)
 
 ### src/lib/types.ts
 - `QueueEntry`: joinedAt, status
@@ -89,8 +89,8 @@ Pure TypeScript game logic (no Firebase, no React):
 
 ---
 
-## Slice 4: Game Board UI
-**Branch:** `feat/game-board-ui`
+## Slice 4: Game Board UI ✓
+**Branch:** `feat/game-board-ui` (implementation complete)
 
 ### components/game/Board.tsx
 - 10x10 grid display
@@ -102,14 +102,25 @@ Pure TypeScript game logic (no Firebase, no React):
 - Cell states: unknown, ship, hit, miss, bomb, revealed
 - Visual styling per state
 
+### components/game/SetupControls.tsx
+- Regenerate button (calls /api/game/regenerate)
+- Ready button with disabled state
+- Place Bomb toggle button
+- Opponent readiness status display
+
 ### pages/game/[roomId]/page.tsx
 - Joins game room via Firebase listener
 - Phase 1: setup UI with regenerate + ready button
 - Shows opponent ready status
+- Redirects to battle phase (placeholder)
 
 ### hooks/useGameState.ts
 - Firebase RTDB listener for game state
-- Returns {game, loading, error}
+- Returns {game, loading, error, currentPlayerState, opponentState, currentUserId}
+
+### API endpoints created
+- `/api/game/regenerate` - Re-randomizes ship placement
+- `/api/game/ready` - Marks player ready, transitions to battle when both ready
 
 ---
 
