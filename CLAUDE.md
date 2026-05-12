@@ -12,6 +12,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - push changes to main branch without explicit approval
 - igore existing patterns or readme files we created
 
+## Required Workflow
+
+**Per-Feature Workflow** - Use OpenSpec for all changes:
+
+1. **Propose**: Run `/opsx:propose` or `openspec propose` to create change artifacts
+2. **Implement**: Run `/opsx:apply <name>` to implement tasks from the change
+3. **Test**: Verify `npm run build && npm test` pass before committing
+4. **Commit**: Create a commit with conventional commit message
+5. **Push**: Push to remote when ready
+6. **Archive**: Run `/opsx:archive <name>` when change is complete and merged
+
+**Never commit directly to main** - always use feature branches and PRs.
+
 ## Project Overview
 
 **Battleships Real-Time** - A 2-player web-based Battleships game with hidden bombs and acceleration mechanics.
@@ -40,9 +53,9 @@ npm run build            # Build Next.js for production
 - `src/app/api/game/route.ts` - Game logic endpoints
 
 ### TODO
-- [ ] Project initialization (Next.js + Firebase)
+- [x] Project initialization (Next.js + Firebase)
 - [ ] Firebase project setup (RTDB)
-- [ ] Game logic library (board, ships, battle)
+- [x] Game logic library (board, ships, battle) ✓
 - [ ] Vercel Serverless Functions (matchmaking, game logic)
 - [ ] Firebase RTDB security rules
 - [ ] Frontend UI (landing, game board)

@@ -1,19 +1,19 @@
 # Battleships - Implementation TODO
 
-## Project Setup
-- [ ] Initialize Next.js 14 App Router project
-- [ ] Configure Firebase SDK (client + admin)
-- [ ] Setup Tailwind CSS
-- [ ] Create folder structure (per architecture.md)
-- [ ] Initialize git repo with `main` branch
-- [ ] Create `firebase.json` with RTDB, Functions, Hosting
+## Project Setup ✓
+- [x] Initialize Next.js 14 App Router project
+- [x] Configure Firebase SDK (client + admin)
+- [x] Setup Tailwind CSS
+- [x] Create folder structure (per architecture.md)
+- [x] Initialize git repo with `main` branch
+- [x] Create `firebase.json` with RTDB, Functions, Hosting
 
 **Branch:** `feat/setup`
 
 ---
 
-## Slice 1: Game Logic Library
-**Branch:** `feat/game-logic`
+## Slice 1: Game Logic Library ✓
+**Branch:** `feat/game-logic` ✓ (merged)
 
 Pure TypeScript game logic (no Firebase, no React):
 
@@ -32,7 +32,7 @@ Pure TypeScript game logic (no Firebase, no React):
 - `checkWin(board)`: returns boolean
 - `applyBombExplosion(board, x, y)`: reveals surrounding 8 tiles
 
-**Tests:** Unit tests for all functions
+**Tests:** Unit tests for all functions (25 passing)
 
 ---
 
@@ -139,42 +139,7 @@ Pure TypeScript game logic (no Firebase, no React):
 
 ## Git Workflow (Per Slice)
 
-```bash
-# 1. Create feature branch
-git checkout -b feat/<slice-name>
-
-# 2. Implement feature
-
-# 3. Run tests and verify
-npm run build
-npm test
-
-# 4. Deploy to Firebase (staging)
-firebase deploy --only hosting,functions
-
-# 5. Commit
-git add .
-git commit -m "feat: add <feature description>"
-
-# 6. Push
-git push -u origin HEAD
-
-# 7. Create PR to main
-# (via GitHub UI or gh cli)
-
-# 8. After merge, update main
-git checkout main && git pull origin main
-```
-
-### Commit Message Format
-```
-feat: add game logic library
-fix: resolve shot cooldown bug
-docs: update game spec
-refactor: extract board generation
-test: add battle resolution tests
-chore: setup Firebase emulators
-```
+**Note**: See [CLAUDE.md](./CLAUDE.md) for the required per-feature workflow using OpenSpec.
 
 ---
 
