@@ -52,13 +52,31 @@ Pure TypeScript game logic (no Firebase, no React):
 ---
 
 ## Slice 3: Matchmaking System
-**Branch:** `feat/matchmaking`
+**Branch:** `feat/matchmaking` (in progress)
 
-### functions/src/matchmaking.ts
-- `onJoinQueue`: adds player to RTDB queue
-- `onLeaveQueue`: removes player from RTDB queue
-- `matchPlayers`: triggered on queue change, pairs 2 players
-- `createGameRoom`: initializes room state in RTDB
+### src/lib/types.ts
+- `QueueEntry`: joinedAt, status
+- `GameRoom`: status, phaseEndsAt, winner, players, shots
+- `PlayerState`: board, ships, bombPosition, ready, cooldown, stats
+- `MatchmakingStatus`: idle | searching | matched | error
+
+### src/lib/matchmaking.ts
+- `matchPlayers()`: pairs 2 FIFO players from queue, creates room
+- `createGameRoom()`: initializes room at `/games/{roomId}` with status: "setup"
+- `handleSetupTimeout()`: auto-finalizes ships/bomb if timeout reached
+- `setupMatchmakingListener()`: RTDB listener for auto-matching
+
+### src/app/api/matchmaking/join/route.ts
+- POST /api/matchmaking/join - joins queue with auth token validation
+- Returns 401 for invalid auth, 409 if already in queue
+- Sets onDisconnect handler for auto-cleanup
+
+### src/app/api/matchmaking/leave/route.ts
+- POST /api/matchmaking/leave - leaves queue (idempotent)
+
+### src/hooks/useMatchmaking.ts
+- `useMatchmaking()` hook: joinQueue(), leaveQueue(), status, roomId, user
+- Real-time status via RTDB listeners
 
 ### RTDB Paths
 - `/matchmaking/queue/{playerId}`
@@ -67,6 +85,7 @@ Pure TypeScript game logic (no Firebase, no React):
 ### Features
 - 30-second room timeout handling
 - Anonymous auth integration
+- FIFO ordering by joinedAt timestamp
 
 ---
 
