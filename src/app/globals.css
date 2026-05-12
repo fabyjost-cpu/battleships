@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: blue-500;
+  --color-secondary: gray-500;
+  --color-success: green-500;
+  --color-danger: red-500;
+  --color-background: slate-900;
+  --color-surface: slate-800;
+}
 
 :root {
   background-color: #1e293b;
