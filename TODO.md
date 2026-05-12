@@ -124,8 +124,8 @@ Pure TypeScript game logic (no Firebase, no React):
 
 ---
 
-## Slice 5: Battle Phase UI
-**Branch:** `feat/battle-ui`
+## Slice 5: Battle Phase UI ✓
+**Branch:** `feat/battle-ui` ✓ (implementation complete)
 
 ### components/game/EnemyBoard.tsx
 - 10x10 grid of unknown cells
@@ -137,16 +137,27 @@ Pure TypeScript game logic (no Firebase, no React):
 - Shows own ships with hit/miss markers
 - Shows bomb explosion effects
 
+### components/game/CooldownIndicator.tsx
+- Visual cooldown timer display
+- Shows ready state when cooldown elapsed
+- Progress bar for cooldown
+
+### hooks/useCooldownTimer.ts
+- Client-side cooldown countdown logic
+- Reset functionality for new cooldown periods
+
 ### hooks/useBattleState.ts
 - Handles shot cooldown timers
 - Manages shot queue (simultaneous resolution)
 - Listens to /games/{roomId}/shots
+- Returns targetedCells, hitCells, canFire, winner
 
-### Cloud Function: onGameShot
-- Validates shot
-- Resolves hit/miss
+### Cloud Function: /api/game/shot
+- Validates cooldown elapsed server-side
+- Resolves hit/miss against opponent board
 - Triggers bomb explosion if applicable
-- Checks win condition
+- Detects ship sinking and win/draw conditions
+- Persists shot to /games/{roomId}/shots
 
 ---
 

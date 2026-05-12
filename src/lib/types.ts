@@ -11,6 +11,7 @@ export interface PlayerState {
   bombPosition: { x: number; y: number } | null;
   ready: boolean;
   cooldown: number;
+  lastShotTime?: number;
   stats: {
     hits: number;
     misses: number;
@@ -32,6 +33,9 @@ export interface Shot {
   x: number;
   y: number;
   timestamp: number;
+  hit?: boolean;
+  sunk?: boolean;
+  bombExplosion?: boolean;
 }
 
 export type MatchmakingStatus = 'idle' | 'searching' | 'matched' | 'error';

@@ -3,9 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useGameState } from '@/hooks/useGameState';
+import { useBattleState } from '@/hooks/useBattleState';
 import { useMatchmaking } from '@/hooks/useMatchmaking';
 import Board from '@/components/game/Board';
 import SetupControls from '@/components/game/SetupControls';
+import EnemyBoard from '@/components/game/EnemyBoard';
+import OwnBoard from '@/components/game/OwnBoard';
+import CooldownIndicator from '@/components/game/CooldownIndicator';
 
 export default function GameRoomPage() {
   const params = useParams();
@@ -22,6 +26,16 @@ export default function GameRoomPage() {
     currentUserId,
   } = useGameState(roomId);
 
+  const {
+    targetedCells,
+    hitCells,
+    canFire,
+    remainingCooldown,
+    totalCooldown,
+    fire,
+    winner,
+  } = useBattleState(roomId, game);
+
   const [isPlacementMode, setIsPlacementMode] = useState(false);
 
   useEffect(() => {
@@ -29,12 +43,6 @@ export default function GameRoomPage() {
       router.push(`/game/${matchedRoomId}`);
     }
   }, [status, matchedRoomId, roomId, router]);
-
-  useEffect(() => {
-    if (game?.status === 'battle' || game?.status === 'finished') {
-      // Future: redirect to battle UI or game over
-    }
-  }, [game?.status]);
 
   const handleRegenerate = async () => {
     const token = await auth.currentUser?.getIdToken();
@@ -70,8 +78,13 @@ export default function GameRoomPage() {
 
   const handleCellClick = (x: number, y: number) => {
     if (!isPlacementMode || !currentUserId) return;
-    // Bomb placement will be handled via API in future
     console.log(`Bomb placement at ${x}, ${y}`);
+  };
+
+  const handleEnemyCellClick = (x: number, y: number) => {
+    if (canFire) {
+      fire(x, y);
+    }
   };
 
   if (loading) {
@@ -128,11 +141,67 @@ export default function GameRoomPage() {
     );
   }
 
+  if (game.status === 'finished') {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-8">
+        <h1 className="text-4xl font-bold">Game Over</h1>
+        {winner === 'draw' ? (
+          <div className="text-2xl text-yellow-400">It&apos;s a Draw!</div>
+        ) : winner === currentUserId ? (
+          <div className="text-2xl text-green-400">You Win!</div>
+        ) : (
+          <div className="text-2xl text-red-400">You Lose!</div>
+        )}
+        <div className="flex gap-4 mt-4">
+          <button
+            onClick={() => router.push('/')}
+            className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Return to Lobby
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  if (game.status === 'battle') {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-8 gap-8">
+        <h1 className="text-3xl font-bold">Battle Phase</h1>
+
+        <CooldownIndicator
+          remainingMs={remainingCooldown}
+          totalMs={totalCooldown}
+        />
+
+        <div className="flex flex-col lg:flex-row gap-8 items-center">
+          <div className="flex flex-col items-center gap-4">
+            <h2 className="text-xl font-semibold">Your Fleet</h2>
+            {currentPlayerState && (
+              <OwnBoard
+                board={currentPlayerState.board}
+                hitCells={hitCells}
+                bombPosition={currentPlayerState.bombPosition}
+              />
+            )}
+          </div>
+
+          <div className="flex flex-col items-center gap-4">
+            <h2 className="text-xl font-semibold">Enemy Waters</h2>
+            <EnemyBoard
+              targetedCells={targetedCells}
+              onCellClick={handleEnemyCellClick}
+              canFire={canFire}
+            />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="text-xl text-slate-400">
-        {game.status === 'battle' ? 'Battle Phase (coming soon)' : 'Game Over'}
-      </div>
+      <div className="text-xl text-slate-400">Unknown game state</div>
     </main>
   );
 }
